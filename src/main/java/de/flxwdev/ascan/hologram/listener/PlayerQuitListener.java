@@ -21,5 +21,6 @@ public final class PlayerQuitListener implements Listener {
                 HologramBuilder.getCache().remove(entry.getKey());
             }
         }
+
     }
 }
