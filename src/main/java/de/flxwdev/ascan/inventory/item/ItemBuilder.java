@@ -1,6 +1,7 @@
 package de.flxwdev.ascan.inventory.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -21,21 +22,20 @@ public class ItemBuilder extends ItemStack {
 
     public ItemBuilder withName(String name) {
         var meta = getItemMeta();
-        meta.displayName(Component.text("§r§7" + name));
+        meta.displayName(Component.text("§r§7" + name).decoration(TextDecoration.ITALIC, false));
         setItemMeta(meta);
         return this;
     }
 
     public ItemBuilder withLore(List<String> lines) {
         var meta = getItemMeta();
-        meta.lore(lines.stream().map(it -> Component.text("§r§7" + it)).toList());
+        meta.lore(lines.stream().map(it -> Component.text("§r§7" + it).decoration(TextDecoration.ITALIC, false)).toList());
         setItemMeta(meta);
         return this;
     }
 
     public ItemBuilder withAmount(int amount) {
         setAmount(amount);
-
         return this;
     }
 

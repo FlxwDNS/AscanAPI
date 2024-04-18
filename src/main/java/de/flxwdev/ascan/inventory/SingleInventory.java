@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class SingleInventory implements Listener {
-
     @Getter
     private final Inventory inventory;
     @Getter

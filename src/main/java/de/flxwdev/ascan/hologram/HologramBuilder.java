@@ -6,13 +6,13 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class HologramBuilder {
     @Getter
-    private final static Map<HologramDisplay, UUID> cache = new HashMap<>();
+    private final static Map<HologramDisplay, UUID> cache = new ConcurrentHashMap<>();
     private final Location location;
 
     private Display.Billboard billboard;
