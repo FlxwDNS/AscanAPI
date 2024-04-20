@@ -142,8 +142,8 @@ public abstract class SingleInventory implements Listener {
         if (event.getCurrentItem() == null || !(event.getWhoClicked() instanceof Player)) return;
         event.setCancelled(!clickable);
 
-        items.values().stream().filter(item -> {
-            var stack = item.getItem();
+        items.entrySet().stream().filter(entry -> {
+            /*var stack = item.getItem();
             if (stack.getType().equals(Material.PLAYER_HEAD)) {
                 if (stack.getItemMeta() instanceof SkullMeta skullMeta) {
                     if (event.getCurrentItem().getItemMeta() instanceof SkullMeta currentItemMeta) {
@@ -164,8 +164,9 @@ public abstract class SingleInventory implements Listener {
                     return stack.getItemMeta().displayName().equals(event.getCurrentItem().getItemMeta().displayName()) && stack.getType().equals(event.getCurrentItem().getType());
                 }
             }
-            return stack.equals(event.getCurrentItem());
-        }).findFirst().ifPresent(item -> {
+            return stack.equals(event.getCurrentItem());*/
+            return entry.getKey() == event.getSlot();
+        }).map(Map.Entry::getValue).findFirst().ifPresent(item -> {
             if (event.isLeftClick()) {
                 item.click();
             } else if(event.getClick().equals(ClickType.MIDDLE)) {
