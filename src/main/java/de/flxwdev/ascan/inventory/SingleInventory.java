@@ -139,7 +139,7 @@ public abstract class SingleInventory implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!event.getInventory().equals(inventory)) return;
-        if (event.getCurrentItem() == null || !(event.getWhoClicked() instanceof Player)) return;
+        if (event.getCurrentItem() == null || !(event.getWhoClicked() instanceof Player) || event.getClickedInventory() == null) return;
         event.setCancelled(!clickable);
 
         items.entrySet().stream().filter(entry -> {
@@ -165,7 +165,7 @@ public abstract class SingleInventory implements Listener {
                 }
             }
             return stack.equals(event.getCurrentItem());*/
-            return entry.getKey() == event.getSlot();
+            return entry.getKey() == event.getSlot() && event.getClickedInventory().equals(getInventory());
         }).map(Map.Entry::getValue).findFirst().ifPresent(item -> {
             if (event.isLeftClick()) {
                 item.click();
