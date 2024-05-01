@@ -1,4 +1,4 @@
-package de.flxwdev.ascan.inventory.misc;
+package de.flxwdev.ascan.misc;
 
 import lombok.Getter;
 import org.bukkit.Material;

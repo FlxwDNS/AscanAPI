@@ -13,8 +13,8 @@ public final class ClickableItem {
     public ClickableItem(ItemStack item, Runnable onClick) {
         this.item = item;
         this.onClick = onClick;
-        this.onMidClick = () -> {};
-        this.onRightClick = () -> {};
+        this.onMidClick = onClick;
+        this.onRightClick = onClick;
     }
 
     public ClickableItem(ItemStack item, Runnable onLeftClick, Runnable onRightClick) {
@@ -36,7 +36,7 @@ public final class ClickableItem {
     }
 
     public void clickMid() {
-        onRightClick.run();
+        onMidClick.run();
     }
 
     public void clickRight() {
