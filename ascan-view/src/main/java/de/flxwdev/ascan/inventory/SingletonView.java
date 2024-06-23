@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,14 +116,16 @@ public abstract class SingletonView implements Listener {
         }
         if(animation > 0) {
             System.out.println("[Debug] SingletonView animation with " + animation + "ticks delay.");
-            Map<ItemStack, Integer> contents = new HashMap<>();
+            Map<Integer, ItemStack> contents = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
                 if(inventory.getItem(i) == null || inventory.getItem(i).getType().equals(Material.AIR)) continue;
-                contents.put(inventory.getItem(i), i);
+                contents.put(i, inventory.getItem(i));
             }
-            contents.forEach((itemStack, integer) -> {
+            contents.forEach((integer, itemStack) -> {
                 System.out.println("[Debug] [" + integer + "] " + itemStack.getType());
             });
+            var items = contents.entrySet().stream().toList();
+            Collections.reverse(items);
 
             inventory.clear();
             new BukkitRunnable() {
@@ -133,8 +137,9 @@ public abstract class SingletonView implements Listener {
                         cancel();
                         return;
                     }
-                    var item = contents.entrySet().stream().toList().get(count);
-                    inventory.setItem(item.getValue(), item.getKey());
+                    var item = items.get(count);
+                    inventory.setItem(item.getKey(), item.getValue());
+                    player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 2);
 
                     count++;
                 }
