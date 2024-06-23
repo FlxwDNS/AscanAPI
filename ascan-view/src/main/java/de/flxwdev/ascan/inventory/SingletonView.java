@@ -124,7 +124,7 @@ public abstract class SingletonView implements Listener {
             Map<Integer, ItemStack> contents = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
                 if(inventory.getItem(i) == null || inventory.getItem(i).getType().equals(Material.AIR)) continue;
-                if(((TextComponent) inventory.getItem(i).displayName()).content().equals("§7 ") && !animationPlaceHolder) continue;
+                if(inventory.getItem(i).getItemMeta().getDisplayName().equals("§7 ") && !animationPlaceHolder) continue;
                 contents.put(i, inventory.getItem(i));
             }
             contents.forEach((integer, itemStack) -> {
