@@ -22,10 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Accessors(fluent = true)
 public abstract class SingletonView implements Listener {
@@ -126,7 +123,7 @@ public abstract class SingletonView implements Listener {
                 System.out.println("[Debug] [" + integer + "] " + itemStack.getType());
             });
             var items = new ArrayList<>(contents.entrySet().stream().toList());
-            Collections.reverse(items);
+            items.sort(Map.Entry.comparingByKey());
 
             inventory.clear();
             new BukkitRunnable() {
