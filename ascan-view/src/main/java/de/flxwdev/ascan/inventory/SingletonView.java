@@ -113,12 +113,15 @@ public abstract class SingletonView implements Listener {
             //player.playSound(player.getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
         }
         if(animation > 0) {
-            System.out.println("[Debug] = SingletonView animation start");
+            System.out.println("[Debug] SingletonView animation with " + animation + "ticks delay.");
             Map<ItemStack, Integer> contents = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
-                if(inventory.getItem(i) == null) continue;
+                if(inventory.getItem(i) == null || inventory.getItem(i).getType().equals(Material.AIR)) continue;
                 contents.put(inventory.getItem(i), i);
             }
+            contents.forEach((itemStack, integer) -> {
+                System.out.println("[Debug] [" + integer + "] " + itemStack.getType());
+            });
 
             inventory.clear();
             new BukkitRunnable() {
