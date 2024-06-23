@@ -14,8 +14,4 @@ public final class AscanAPI {
         instance = plugin;
         config = inventoryConfig;
     }
-
-    public static void getConfigHandler() {
-        
-    }
 }

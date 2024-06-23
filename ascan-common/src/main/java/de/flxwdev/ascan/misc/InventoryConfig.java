@@ -1,10 +1,12 @@
 package de.flxwdev.ascan.misc;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 
 @Getter
+@Accessors(fluent = true)
 public final class InventoryConfig {
     public InventoryConfig() {
         this.placeHolder = Material.BLACK_STAINED_GLASS_PANE;

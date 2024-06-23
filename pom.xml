@@ -9,8 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>ascan-inventory</module>
         <module>ascan-common</module>
+        <module>ascan-inventory</module>
+        <module>ascan-manipulate</module>
     </modules>
 
     <properties>

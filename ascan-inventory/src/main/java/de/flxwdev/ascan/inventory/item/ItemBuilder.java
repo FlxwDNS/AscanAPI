@@ -1,5 +1,6 @@
 package de.flxwdev.ascan.inventory.item;
 
+import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.List;
 
+@Accessors(fluent = true)
 public class ItemBuilder extends ItemStack {
     public ItemBuilder(Material material) {
         super(material);

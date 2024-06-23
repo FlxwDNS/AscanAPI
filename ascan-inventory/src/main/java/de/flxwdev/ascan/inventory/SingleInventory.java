@@ -1,10 +1,11 @@
 package de.flxwdev.ascan.inventory;
 
 import de.flxwdev.ascan.AscanAPI;
-import de.flxwdev.ascan.inventory.item.ClickableItem;
+import de.flxwdev.ascan.inventory.item.InteractItem;
 import de.flxwdev.ascan.inventory.item.ItemBuilder;
 import dev.dbassett.skullcreator.SkullCreator;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,17 +18,17 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Accessors(fluent = true)
 public abstract class SingleInventory implements Listener {
     @Getter
     private final Inventory inventory;
     @Getter
-    private final Map<Integer, ClickableItem> items;
+    private final Map<Integer, InteractItem> items;
     private final Boolean clickable;
     private final int rows;
 
@@ -35,19 +36,19 @@ public abstract class SingleInventory implements Listener {
     private final Player player;
 
     @Getter
-    private Material placeholder;
+    private Material placeHolder;
 
-    public SingleInventory(Player player, String name, int rows, boolean clickable) {
+    public SingleInventory(Player player, Component name, int rows, boolean clickable) {
         this(player, name, rows, clickable, true);
     }
 
-    public SingleInventory(Player player, String name, int rows, boolean clickable, boolean open) {
+    public SingleInventory(Player player, Component name, int rows, boolean clickable, boolean open) {
         this.player = player;
-        this.inventory = Bukkit.createInventory(null, rows * 9, Component.text("§7" + name + " §8(§7" + player.getName() + "§8)"));
+        this.inventory = Bukkit.createInventory(null, rows * 9, name.append(Component.text(" §8(§7" + player.getName() + "§8)")));
         this.items = new HashMap<>();
         this.clickable = clickable;
         this.rows = rows;
-        this.placeholder = AscanAPI.getConfig().getPlaceHolder();
+        this.placeHolder = AscanAPI.getConfig().placeHolder();
 
         AscanAPI.getInstance().getServer().getPluginManager().registerEvents(this, AscanAPI.getInstance());
 
@@ -57,11 +58,11 @@ public abstract class SingleInventory implements Listener {
     }
 
     public void customPlaceholder(Material placeholder) {
-        this.placeholder = placeholder;
+        this.placeHolder = placeholder;
     }
 
-    public void setBackPage(Class<? extends SingleInventory> inventory) {
-        var item = new ClickableItem(ItemBuilder.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).withName("§8» §6Zurück"), () -> {
+    public void backPage(Class<? extends SingleInventory> inventory) {
+        var item = new InteractItem(ItemBuilder.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).withName("§8» §6Zurück"), () -> {
             try {
                 inventory.getConstructors()[0].newInstance(player);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -69,31 +70,31 @@ public abstract class SingleInventory implements Listener {
             }
         });
 
-        if (getItemStack(rows, 4).getType().equals(placeholder)) {
-            setClickableItem(rows, 4, item);
-        } else if (getItemStack(rows, 5).getType().equals(placeholder)) {
-            setClickableItem(rows, 3, item);
-            this.inventory.setItem(((rows - 1) * 9) + 5, getItemStack(rows, 4));
-            setItem(rows, 4, ItemBuilder.of(placeholder).withName("§7 "));
+        if (itemStack(rows, 4).getType().equals(placeHolder)) {
+            item(rows, 4, item);
+        } else if (itemStack(rows, 5).getType().equals(placeHolder)) {
+            item(rows, 3, item);
+            this.inventory.setItem(((rows - 1) * 9) + 5, itemStack(rows, 4));
+            item(rows, 4, ItemBuilder.of(placeHolder).withName("§7 "));
         } else {
-            setClickableItem(rows, 3, item);
+            item(rows, 3, item);
         }
     }
 
-    public ItemStack getItemStack(int row, int slot) {
+    public ItemStack itemStack(int row, int slot) {
         return inventory.getItem(((row - 1) * 9) + slot);
     }
 
-    public void addItem(ItemStack item) {
+    public void item(ItemStack item) {
         inventory.addItem(item);
     }
 
-    public void setItem(int slot, ItemStack item) {
+    public void item(int slot, ItemStack item) {
         inventory.setItem(slot, item);
         items.remove(slot);
     }
 
-    public void setItem(int row, int slot, ItemStack item) {
+    public void item(int row, int slot, ItemStack item) {
         inventory.setItem(((row - 1) * 9) + slot, item);
         items.remove(((row - 1) * 9) + slot);
     }
@@ -107,20 +108,20 @@ public abstract class SingleInventory implements Listener {
         player.openInventory(inventory);
     }
 
-    public void setClickableItem(int slot, ClickableItem clickableItem) {
-        inventory.setItem(slot, clickableItem.getItem());
-        items.put(slot, clickableItem);
+    public void item(int slot, InteractItem interactItem) {
+        inventory.setItem(slot, interactItem.item());
+        items.put(slot, interactItem);
     }
 
-    public void setClickableItem(int row, int slot, ClickableItem clickableItem) {
-        inventory.setItem(((row - 1) * 9) + slot, clickableItem.getItem());
-        items.put(((row - 1) * 9) + slot, clickableItem);
+    public void item(int row, int slot, InteractItem interactItem) {
+        inventory.setItem(((row - 1) * 9) + slot, interactItem.item());
+        items.put(((row - 1) * 9) + slot, interactItem);
     }
 
-    public int addClickableItem(ClickableItem clickableItem) {
+    public int item(InteractItem clickableItem) {
         for (int i = 0; i < inventory.getSize(); i++) {
             if(inventory.getItem(i) == null) {
-                inventory.setItem(i, clickableItem.getItem());
+                inventory.setItem(i, clickableItem.item());
                 items.put(i, clickableItem);
                 return i;
             }
@@ -128,12 +129,12 @@ public abstract class SingleInventory implements Listener {
         return 0;
     }
 
-    public void setPlaceHolder(int row) {
-        for (int i = 0; i < 9; i++) setPlaceHolder(row, i);
+    public void placeHolder(int row) {
+        for (int i = 0; i < 9; i++) placeHolder(row, i);
     }
 
-    public void setPlaceHolder(int row, int slot) {
-        setItem(row, slot, ItemBuilder.of(new ItemStack(placeholder)).withName("§7 "));
+    public void placeHolder(int row, int slot) {
+        item(row, slot, ItemBuilder.of(new ItemStack(placeHolder)).withName("§7 "));
     }
 
     @EventHandler
@@ -142,31 +143,7 @@ public abstract class SingleInventory implements Listener {
         if (event.getCurrentItem() == null || !(event.getWhoClicked() instanceof Player) || event.getClickedInventory() == null) return;
         event.setCancelled(!clickable);
 
-        items.entrySet().stream().filter(entry -> {
-            /*var stack = item.getItem();
-            if (stack.getType().equals(Material.PLAYER_HEAD)) {
-                if (stack.getItemMeta() instanceof SkullMeta skullMeta) {
-                    if (event.getCurrentItem().getItemMeta() instanceof SkullMeta currentItemMeta) {
-                        if (skullMeta.hasOwner() && currentItemMeta.hasOwner()) {
-                            if (skullMeta.getOwner().equals(currentItemMeta.getOwner())) {
-                                if(skullMeta.displayName() == null && currentItemMeta.displayName() == null) {
-                                    return (event.getRawSlot() == event.getSlot());
-                                } else if(skullMeta.displayName() == null) {
-                                    return false;
-                                }
-                                if (skullMeta.displayName().equals(currentItemMeta.displayName())) {
-                                    return (event.getRawSlot() == event.getSlot());
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    return stack.getItemMeta().displayName().equals(event.getCurrentItem().getItemMeta().displayName()) && stack.getType().equals(event.getCurrentItem().getType());
-                }
-            }
-            return stack.equals(event.getCurrentItem());*/
-            return entry.getKey() == event.getSlot() && event.getClickedInventory().equals(getInventory());
-        }).map(Map.Entry::getValue).findFirst().ifPresent(item -> {
+        items.entrySet().stream().filter(entry -> entry.getKey() == event.getSlot() && event.getClickedInventory().equals(inventory())).map(Map.Entry::getValue).findFirst().ifPresent(item -> {
             if (event.isLeftClick()) {
                 item.click();
             } else if(event.getClick().equals(ClickType.MIDDLE)) {
@@ -179,8 +156,8 @@ public abstract class SingleInventory implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().equals(getInventory())) {
-            getItems().clear();
+        if (event.getInventory().equals(inventory())) {
+            items().clear();
         }
     }
 }
