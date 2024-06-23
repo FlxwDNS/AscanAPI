@@ -29,7 +29,7 @@ public abstract class PageableView<T> extends SingletonView {
     @Getter
     private int currentPage = 1;
 
-    private final InteractItem localLastPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9")).withName(AscanAPI.getConfig().arrowLeftName()), () -> {
+    private final InteractItem localLastPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9")).name(AscanAPI.getConfig().arrowLeftName()), () -> {
         if(currentPage > 1) {
             createPage(--currentPage);
             var sound = AscanAPI.getConfig().pageSwitchSound();
@@ -39,7 +39,7 @@ public abstract class PageableView<T> extends SingletonView {
             player().playSound(player().getLocation(), sound.getSound(), 1, sound.getPitch());
         }
     });
-    private final InteractItem localNextPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).withName(AscanAPI.getConfig().arrowRightName()), () -> {
+    private final InteractItem localNextPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).name(AscanAPI.getConfig().arrowRightName()), () -> {
         if(currentPage != maxPage() && maxPage() > 1) {
             createPage(++currentPage);
             var sound = AscanAPI.getConfig().pageSwitchSound();
@@ -70,7 +70,7 @@ public abstract class PageableView<T> extends SingletonView {
 
     @Override
     public void backPage(Class<? extends SingletonView> inventory) {
-        this.backItem = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).withName(AscanAPI.getConfig().arrowBackName()), () -> {
+        this.backItem = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).name(AscanAPI.getConfig().arrowBackName()), () -> {
             try {
                 inventory.getConstructors()[0].newInstance(placeHolder());
                 var sound = AscanAPI.getConfig().backPageSound();
@@ -99,7 +99,7 @@ public abstract class PageableView<T> extends SingletonView {
         }
 
         if(values.isEmpty()) {
-            item(3, 4, ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/3cc470ae2631efdfaf967b369413bc2451cd7a39465da7836a6c7a14e877")).withName("§8» §cDie Liste ist leer§8!"));
+            item(3, 4, ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/3cc470ae2631efdfaf967b369413bc2451cd7a39465da7836a6c7a14e877")).name("§8» §cDie Liste ist leer§8!"));
         }
 
         for (T element : values.subList(possibleAmount * (currentPage - 1), Math.min(values.size(), possibleAmount * (currentPage - 1) + possibleAmount))) {

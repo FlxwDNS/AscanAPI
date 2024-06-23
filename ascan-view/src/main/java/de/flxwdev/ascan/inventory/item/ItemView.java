@@ -22,26 +22,33 @@ public class ItemView extends ItemStack {
         super(itemStack);
     }
 
-    public ItemView withName(String name) {
+    public ItemView name(String name) {
         var meta = getItemMeta();
         meta.displayName(Component.text("§r§7" + name).decoration(TextDecoration.ITALIC, false));
         setItemMeta(meta);
         return this;
     }
 
-    public ItemView withLore(List<String> lines) {
+    public ItemView rawList(List<String> lines) {
         var meta = getItemMeta();
         meta.lore(lines.stream().map(it -> Component.text("§r§7" + it).decoration(TextDecoration.ITALIC, false)).toList());
         setItemMeta(meta);
         return this;
     }
 
-    public ItemView withAmount(int amount) {
+    public ItemView list(List<Component> lines) {
+        var meta = getItemMeta();
+        meta.lore(lines.stream().map(it -> it.decoration(TextDecoration.ITALIC, false)).toList());
+        setItemMeta(meta);
+        return this;
+    }
+
+    public ItemView amount(int amount) {
         setAmount(amount);
         return this;
     }
 
-    public ItemView withGlow() {
+    public ItemView glow() {
         addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
         var meta = getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -54,16 +61,16 @@ public class ItemView extends ItemStack {
         return this;
     }
 
-    public ItemView withFlag(ItemFlag itemFlag) {
+    public ItemView flag(ItemFlag itemFlag) {
         var meta = getItemMeta();
         meta.addItemFlags(itemFlag);
         setItemMeta(meta);
         return this;
     }
 
-    public ItemView withFlags(ItemFlag... itemFlags) {
+    public ItemView flag(ItemFlag... itemFlags) {
         for (ItemFlag itemFlag : itemFlags) {
-            withFlag(itemFlag);
+            flag(itemFlag);
         }
         return this;
     }

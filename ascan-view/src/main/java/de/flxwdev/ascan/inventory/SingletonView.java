@@ -62,7 +62,7 @@ public abstract class SingletonView implements Listener {
     }
 
     public void backPage(Class<? extends SingletonView> inventory) {
-        var item = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).withName("§8» §6Zurück"), () -> {
+        var item = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).name("§8» §6Zurück"), () -> {
             try {
                 inventory.getConstructors()[0].newInstance(player);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -75,7 +75,7 @@ public abstract class SingletonView implements Listener {
         } else if (itemStack(rows, 5).getType().equals(placeHolder)) {
             item(rows, 3, item);
             this.inventory.setItem(((rows - 1) * 9) + 5, itemStack(rows, 4));
-            item(rows, 4, ItemView.of(placeHolder).withName("§7 "));
+            item(rows, 4, ItemView.of(placeHolder).name("§7 "));
         } else {
             item(rows, 3, item);
         }
@@ -134,7 +134,7 @@ public abstract class SingletonView implements Listener {
     }
 
     public void placeHolder(int row, int slot) {
-        item(row, slot, ItemView.of(new ItemStack(placeHolder)).withName("§7 "));
+        item(row, slot, ItemView.of(new ItemStack(placeHolder)).name("§7 "));
     }
 
     @EventHandler
