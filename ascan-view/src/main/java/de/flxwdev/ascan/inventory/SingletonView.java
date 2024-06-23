@@ -37,6 +37,7 @@ public abstract class SingletonView implements Listener {
 
     private long animation;
     private Audio animationSound;
+    private Audio animationFinishSound;
     private boolean animationPlaceHolder;
 
     @Getter
@@ -65,9 +66,10 @@ public abstract class SingletonView implements Listener {
         }
     }
 
-    public void animation(long delay, Audio sound, boolean placeHolder) {
+    public void animation(long delay, Audio sound, Audio finish, boolean placeHolder) {
         this.animation = delay;
         this.animationSound = sound;
+        this.animationFinishSound = finish;
         this.animationPlaceHolder = placeHolder;
     }
 
@@ -124,7 +126,7 @@ public abstract class SingletonView implements Listener {
             Map<Integer, ItemStack> contents = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
                 if(inventory.getItem(i) == null || inventory.getItem(i).getType().equals(Material.AIR)) continue;
-                if(inventory.getItem(i).getItemMeta().getDisplayName().equals("§7 ") && !animationPlaceHolder) continue;
+                if(inventory.getItem(i).getItemMeta().getDisplayName().equals("§r§7§7 ") && !animationPlaceHolder) continue;
                 contents.put(i, inventory.getItem(i));
             }
             contents.forEach((integer, itemStack) -> {
@@ -141,6 +143,7 @@ public abstract class SingletonView implements Listener {
                 public void run() {
                     if(count >= contents.size()) {
                         cancel();
+                        player.playSound(player.getLocation(), animationFinishSound.sound(), 1, animationFinishSound.pitch());
                         return;
                     }
                     var item = items.get(count);
