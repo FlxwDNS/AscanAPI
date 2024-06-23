@@ -3,10 +3,12 @@ package de.flxwdev.ascan.inventory;
 import de.flxwdev.ascan.AscanAPI;
 import de.flxwdev.ascan.inventory.item.InteractItem;
 import de.flxwdev.ascan.inventory.item.ItemView;
+import de.flxwdev.ascan.misc.Audio;
 import dev.dbassett.skullcreator.SkullCreator;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,7 +34,10 @@ public abstract class SingletonView implements Listener {
     private final Map<Integer, InteractItem> items;
     private final Boolean clickable;
     private final int rows;
+
     private long animation;
+    private Audio animationSound;
+    private boolean animationPlaceHolder;
 
     @Getter
     private final Player player;
@@ -60,8 +65,10 @@ public abstract class SingletonView implements Listener {
         }
     }
 
-    public void animation(long delay) {
+    public void animation(long delay, Audio sound, boolean placeHolder) {
         this.animation = delay;
+        this.animationSound = sound;
+        this.animationPlaceHolder = placeHolder;
     }
 
     public void customPlaceholder(Material placeholder) {
@@ -117,6 +124,7 @@ public abstract class SingletonView implements Listener {
             Map<Integer, ItemStack> contents = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
                 if(inventory.getItem(i) == null || inventory.getItem(i).getType().equals(Material.AIR)) continue;
+                if(((TextComponent) inventory.getItem(i).displayName()).content().equals("§7 ") && !animationPlaceHolder) continue;
                 contents.put(i, inventory.getItem(i));
             }
             contents.forEach((integer, itemStack) -> {
@@ -137,7 +145,7 @@ public abstract class SingletonView implements Listener {
                     }
                     var item = items.get(count);
                     inventory.setItem(item.getKey(), item.getValue());
-                    player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 2);
+                    player.playSound(player.getLocation(), animationSound.sound(), 1, animationSound.pitch());
 
                     count++;
                 }

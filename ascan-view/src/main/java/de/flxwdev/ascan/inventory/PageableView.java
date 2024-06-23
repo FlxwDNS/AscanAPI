@@ -33,20 +33,20 @@ public abstract class PageableView<T> extends SingletonView {
         if(currentPage > 1) {
             createPage(--currentPage);
             var sound = AscanAPI.getConfig().pageSwitchSound();
-            player().playSound(player().getLocation(), sound.getSound(), 1, sound.getPitch());
+            player().playSound(player().getLocation(), sound.sound(), 1, sound.pitch());
         } else {
             var sound = AscanAPI.getConfig().pageSwitchErrorSound();
-            player().playSound(player().getLocation(), sound.getSound(), 1, sound.getPitch());
+            player().playSound(player().getLocation(), sound.sound(), 1, sound.pitch());
         }
     });
     private final InteractItem localNextPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).name(AscanAPI.getConfig().arrowRightName()), () -> {
         if(currentPage != maxPage() && maxPage() > 1) {
             createPage(++currentPage);
             var sound = AscanAPI.getConfig().pageSwitchSound();
-            player().playSound(player().getLocation(), sound.getSound(), 1, sound.getPitch());
+            player().playSound(player().getLocation(), sound.sound(), 1, sound.pitch());
         } else {
             var sound = AscanAPI.getConfig().pageSwitchErrorSound();
-            player().playSound(player().getLocation(), sound.getSound(), 1, sound.getPitch());
+            player().playSound(player().getLocation(), sound.sound(), 1, sound.pitch());
         }
     });
 
@@ -74,7 +74,7 @@ public abstract class PageableView<T> extends SingletonView {
             try {
                 inventory.getConstructors()[0].newInstance(placeHolder());
                 var sound = AscanAPI.getConfig().backPageSound();
-                player().playSound(player().getLocation(), sound.getSound(), 1, sound.getPitch());
+                player().playSound(player().getLocation(), sound.sound(), 1, sound.pitch());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
