@@ -39,6 +39,7 @@ public abstract class SingletonView implements Listener {
     private Audio animationSound;
     private Audio animationFinishSound;
     private boolean animationPlaceHolder;
+    private boolean animationPlaceHolderLate;
 
     @Getter
     private final Player player;
@@ -66,11 +67,12 @@ public abstract class SingletonView implements Listener {
         }
     }
 
-    public void animation(long delay, Audio sound, Audio finish, boolean placeHolder) {
+    public void animation(long delay, Audio sound, Audio finish, boolean placeHolder, boolean placeHolderLate) {
         this.animation = delay;
         this.animationSound = sound;
         this.animationFinishSound = finish;
         this.animationPlaceHolder = placeHolder;
+        this.animationPlaceHolderLate = placeHolderLate;
     }
 
     public void customPlaceholder(Material placeholder) {
@@ -124,9 +126,13 @@ public abstract class SingletonView implements Listener {
         if(animation > 0) {
             System.out.println("[Debug] SingletonView animation with " + animation + "ticks delay.");
             Map<Integer, ItemStack> contents = new HashMap<>();
+            Map<Integer, ItemStack> placeholder = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
                 if(inventory.getItem(i) == null || inventory.getItem(i).getType().equals(Material.AIR)) continue;
-                if(inventory.getItem(i).getItemMeta().getDisplayName().equals("§r§7§7 ") && !animationPlaceHolder) continue;
+                if(inventory.getItem(i).getItemMeta().getDisplayName().equals("§r§7§7 ") && !animationPlaceHolder) {
+                    placeholder.put(i, inventory.getItem(i));
+                    continue;
+                }
                 contents.put(i, inventory.getItem(i));
             }
             contents.forEach((integer, itemStack) -> {
@@ -136,6 +142,8 @@ public abstract class SingletonView implements Listener {
             items.sort(Map.Entry.comparingByKey());
 
             inventory.clear();
+            if(!animationPlaceHolder && !animationPlaceHolderLate) placeholder.forEach(inventory::setItem);
+
             new BukkitRunnable() {
                 int count = 0;
 
@@ -144,6 +152,7 @@ public abstract class SingletonView implements Listener {
                     if(count >= contents.size()) {
                         cancel();
                         player.playSound(player.getLocation(), animationFinishSound.sound(), 1, animationFinishSound.pitch());
+                        if(!animationPlaceHolder && animationPlaceHolderLate) placeholder.forEach(inventory::setItem);
                         return;
                     }
                     var item = items.get(count);
