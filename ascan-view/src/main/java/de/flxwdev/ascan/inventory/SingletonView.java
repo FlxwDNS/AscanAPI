@@ -41,7 +41,7 @@ public abstract class SingletonView implements Listener {
     private Material placeHolder;
 
     public SingletonView(Player player, Component name, int rows, boolean clickable) {
-        this(player, name, rows, clickable, true);
+        this(player, name, rows, clickable, false);
     }
 
     public SingletonView(Player player, Component name, int rows, boolean clickable, boolean open) {
@@ -113,6 +113,7 @@ public abstract class SingletonView implements Listener {
             //player.playSound(player.getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
         }
         if(animation > 0) {
+            System.out.println("ANIMATION START");
             Map<ItemStack, Integer> contents = new HashMap<>();
             for (int i = 0; i < inventory.getSize(); i++) {
                 if(inventory.getItem(i) == null) continue;
