@@ -2,7 +2,7 @@ package de.flxwdev.ascan.inventory;
 
 import de.flxwdev.ascan.AscanAPI;
 import de.flxwdev.ascan.inventory.item.InteractItem;
-import de.flxwdev.ascan.inventory.item.ItemBuilder;
+import de.flxwdev.ascan.inventory.item.ItemView;
 import dev.dbassett.skullcreator.SkullCreator;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Accessors(fluent = true)
-public abstract class SingleInventory implements Listener {
+public abstract class SingletonView implements Listener {
     @Getter
     private final Inventory inventory;
     @Getter
@@ -38,11 +38,11 @@ public abstract class SingleInventory implements Listener {
     @Getter
     private Material placeHolder;
 
-    public SingleInventory(Player player, Component name, int rows, boolean clickable) {
+    public SingletonView(Player player, Component name, int rows, boolean clickable) {
         this(player, name, rows, clickable, true);
     }
 
-    public SingleInventory(Player player, Component name, int rows, boolean clickable, boolean open) {
+    public SingletonView(Player player, Component name, int rows, boolean clickable, boolean open) {
         this.player = player;
         this.inventory = Bukkit.createInventory(null, rows * 9, name.append(Component.text(" §8(§7" + player.getName() + "§8)")));
         this.items = new HashMap<>();
@@ -61,8 +61,8 @@ public abstract class SingleInventory implements Listener {
         this.placeHolder = placeholder;
     }
 
-    public void backPage(Class<? extends SingleInventory> inventory) {
-        var item = new InteractItem(ItemBuilder.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).withName("§8» §6Zurück"), () -> {
+    public void backPage(Class<? extends SingletonView> inventory) {
+        var item = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/f84f597131bbe25dc058af888cb29831f79599bc67c95c802925ce4afba332fc")).withName("§8» §6Zurück"), () -> {
             try {
                 inventory.getConstructors()[0].newInstance(player);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -75,7 +75,7 @@ public abstract class SingleInventory implements Listener {
         } else if (itemStack(rows, 5).getType().equals(placeHolder)) {
             item(rows, 3, item);
             this.inventory.setItem(((rows - 1) * 9) + 5, itemStack(rows, 4));
-            item(rows, 4, ItemBuilder.of(placeHolder).withName("§7 "));
+            item(rows, 4, ItemView.of(placeHolder).withName("§7 "));
         } else {
             item(rows, 3, item);
         }
@@ -134,7 +134,7 @@ public abstract class SingleInventory implements Listener {
     }
 
     public void placeHolder(int row, int slot) {
-        item(row, slot, ItemBuilder.of(new ItemStack(placeHolder)).withName("§7 "));
+        item(row, slot, ItemView.of(new ItemStack(placeHolder)).withName("§7 "));
     }
 
     @EventHandler

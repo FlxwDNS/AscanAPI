@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>ascan-common</module>
-        <module>ascan-inventory</module>
+        <module>ascan-view</module>
         <module>ascan-manipulate</module>
     </modules>
 

@@ -13,35 +13,35 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import java.util.List;
 
 @Accessors(fluent = true)
-public class ItemBuilder extends ItemStack {
-    public ItemBuilder(Material material) {
+public class ItemView extends ItemStack {
+    public ItemView(Material material) {
         super(material);
     }
 
-    public ItemBuilder(ItemStack itemStack) {
+    public ItemView(ItemStack itemStack) {
         super(itemStack);
     }
 
-    public ItemBuilder withName(String name) {
+    public ItemView withName(String name) {
         var meta = getItemMeta();
         meta.displayName(Component.text("§r§7" + name).decoration(TextDecoration.ITALIC, false));
         setItemMeta(meta);
         return this;
     }
 
-    public ItemBuilder withLore(List<String> lines) {
+    public ItemView withLore(List<String> lines) {
         var meta = getItemMeta();
         meta.lore(lines.stream().map(it -> Component.text("§r§7" + it).decoration(TextDecoration.ITALIC, false)).toList());
         setItemMeta(meta);
         return this;
     }
 
-    public ItemBuilder withAmount(int amount) {
+    public ItemView withAmount(int amount) {
         setAmount(amount);
         return this;
     }
 
-    public ItemBuilder withGlow() {
+    public ItemView withGlow() {
         addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
         var meta = getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -49,26 +49,26 @@ public class ItemBuilder extends ItemStack {
         return this;
     }
 
-    public ItemBuilder enchant(Enchantment enchantment, int level) {
+    public ItemView enchant(Enchantment enchantment, int level) {
         addUnsafeEnchantment(enchantment, level);
         return this;
     }
 
-    public ItemBuilder withFlag(ItemFlag itemFlag) {
+    public ItemView withFlag(ItemFlag itemFlag) {
         var meta = getItemMeta();
         meta.addItemFlags(itemFlag);
         setItemMeta(meta);
         return this;
     }
 
-    public ItemBuilder withFlags(ItemFlag... itemFlags) {
+    public ItemView withFlags(ItemFlag... itemFlags) {
         for (ItemFlag itemFlag : itemFlags) {
             withFlag(itemFlag);
         }
         return this;
     }
 
-    public ItemBuilder leatherColor(Color color) {
+    public ItemView leatherColor(Color color) {
         var meta = (LeatherArmorMeta) getItemMeta();
         meta.setColor(color);
         setItemMeta(meta);
@@ -76,11 +76,11 @@ public class ItemBuilder extends ItemStack {
     }
 
 
-    public static ItemBuilder of(Material material) {
-        return new ItemBuilder(material);
+    public static ItemView of(Material material) {
+        return new ItemView(material);
     }
 
-    public static ItemBuilder of(ItemStack itemStack) {
-        return new ItemBuilder(itemStack);
+    public static ItemView of(ItemStack itemStack) {
+        return new ItemView(itemStack);
     }
 }

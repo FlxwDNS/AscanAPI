@@ -3,7 +3,7 @@ package de.flxwdev.ascan.inventory;
 import com.google.common.collect.Multimap;
 import de.flxwdev.ascan.AscanAPI;
 import de.flxwdev.ascan.inventory.item.InteractItem;
-import de.flxwdev.ascan.inventory.item.ItemBuilder;
+import de.flxwdev.ascan.inventory.item.ItemView;
 import dev.dbassett.skullcreator.SkullCreator;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInventory {
+public abstract class FilterView<T, D extends Enum<D>> extends SingletonView {
     private final Multimap<D, List<T>> values;
     private final List<D> categories;
 
@@ -26,7 +26,7 @@ public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInvent
     private int possibleAmount = 0;
     private int currentCategory = 0;
 
-    private final InteractItem localLastPage = new InteractItem(ItemBuilder.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9")).withName(AscanAPI.getConfig().arrowLeftName()), () -> {
+    private final InteractItem localLastPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9")).withName(AscanAPI.getConfig().arrowLeftName()), () -> {
         if(currentPage > 1) {
             createPage(--currentPage);
             player().playSound(player().getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
@@ -34,7 +34,7 @@ public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInvent
             player().playSound(player().getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
         }
     });
-    private final InteractItem localNextPage = new InteractItem(ItemBuilder.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).withName(AscanAPI.getConfig().arrowRightName()), () -> {
+    private final InteractItem localNextPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).withName(AscanAPI.getConfig().arrowRightName()), () -> {
         if(currentPage != maxPage() && maxPage() > 1) {
             createPage(++currentPage);
             player().playSound(player().getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
@@ -45,7 +45,7 @@ public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInvent
 
     private InteractItem filterItem;
 
-    public FilterInventory(Player player, Component name, int rows, boolean clickable, Multimap<D, List<T>> values, List<D> categories) {
+    public FilterView(Player player, Component name, int rows, boolean clickable, Multimap<D, List<T>> values, List<D> categories) {
         super(player, name, rows, clickable);
         this.categories = categories;
 
@@ -58,7 +58,7 @@ public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInvent
     }
 
     private void defineFilterItem() {
-        filterItem = new InteractItem(new ItemBuilder(Material.SPYGLASS).withName("§8» §6Filter").withLore(loreList()), () -> {
+        filterItem = new InteractItem(new ItemView(Material.SPYGLASS).withName("§8» §6Filter").withLore(loreList()), () -> {
             currentCategory++;
             if(categories.size() < currentCategory) {
                 Bukkit.getScheduler().runTaskLater(AscanAPI.getInstance(), () -> {
@@ -91,7 +91,7 @@ public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInvent
         });
 
         if(tempList.isEmpty()) {
-            item(3, 4, ItemBuilder.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/3cc470ae2631efdfaf967b369413bc2451cd7a39465da7836a6c7a14e877")).withName("§8» §cDie Liste ist leer§8!"));
+            item(3, 4, ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/3cc470ae2631efdfaf967b369413bc2451cd7a39465da7836a6c7a14e877")).withName("§8» §cDie Liste ist leer§8!"));
             return;
         }
 
@@ -117,10 +117,10 @@ public abstract class FilterInventory<T, D extends Enum<D>> extends SingleInvent
     public void clear() {
         items().clear();
 
-        for (int i = 0; i < 7; i++) item(2, i + 1, ItemBuilder.of(Material.AIR));
-        for (int i = 0; i < 7; i++) item(3, i + 1, ItemBuilder.of(Material.AIR));
-        for (int i = 0; i < 7; i++) item(4, i + 1, ItemBuilder.of(Material.AIR));
-        for (int i = 0; i < 7; i++) item(5, i + 1, ItemBuilder.of(Material.AIR));
+        for (int i = 0; i < 7; i++) item(2, i + 1, ItemView.of(Material.AIR));
+        for (int i = 0; i < 7; i++) item(3, i + 1, ItemView.of(Material.AIR));
+        for (int i = 0; i < 7; i++) item(4, i + 1, ItemView.of(Material.AIR));
+        for (int i = 0; i < 7; i++) item(5, i + 1, ItemView.of(Material.AIR));
     }
 
     public int slot() {

@@ -5,10 +5,10 @@
     <file url="file://$PROJECT_DIR$/Inventory/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ascan-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ascan-common/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ascan-inventory/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ascan-inventory/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ascan-manipulate/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ascan-manipulate/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ascan-view/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ascan-view/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
