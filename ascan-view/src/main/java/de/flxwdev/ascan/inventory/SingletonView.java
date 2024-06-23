@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public abstract class SingletonView implements Listener {
     private final Map<Integer, InteractItem> items;
     private final Boolean clickable;
     private final int rows;
+    private long animation;
 
     @Getter
     private final Player player;
@@ -48,6 +50,7 @@ public abstract class SingletonView implements Listener {
         this.items = new HashMap<>();
         this.clickable = clickable;
         this.rows = rows;
+        this.animation = 0;
         this.placeHolder = AscanAPI.getConfig().placeHolder();
 
         AscanAPI.getInstance().getServer().getPluginManager().registerEvents(this, AscanAPI.getInstance());
@@ -55,6 +58,10 @@ public abstract class SingletonView implements Listener {
         if(open) {
             open(player);
         }
+    }
+
+    public void animation(long delay) {
+        this.animation = delay;
     }
 
     public void customPlaceholder(Material placeholder) {
@@ -105,6 +112,32 @@ public abstract class SingletonView implements Listener {
         } else {
             //player.playSound(player.getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
         }
+        if(animation > 0) {
+            Map<ItemStack, Integer> contents = new HashMap<>();
+            for (int i = 0; i < inventory.getSize(); i++) {
+                if(inventory.getItem(i) == null) continue;
+                contents.put(inventory.getItem(i), i);
+            }
+
+            inventory.clear();
+            new BukkitRunnable() {
+                int count = 0;
+
+                @Override
+                public void run() {
+                    if(count >= contents.size()) {
+                        cancel();
+                        return;
+                    }
+                    var item = contents.entrySet().stream().toList().get(count);
+                    inventory.setItem(item.getValue(), item.getKey());
+
+                    count++;
+                }
+            }.runTaskTimer(AscanAPI.getInstance(), 0, animation);
+            return;
+        }
+
         player.openInventory(inventory);
     }
 
