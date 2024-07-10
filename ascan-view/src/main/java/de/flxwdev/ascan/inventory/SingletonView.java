@@ -1,6 +1,6 @@
 package de.flxwdev.ascan.inventory;
 
-import de.flxwdev.ascan.AscanAPI;
+import de.flxwdev.ascan.AscanLayer;
 import de.flxwdev.ascan.inventory.item.InteractItem;
 import de.flxwdev.ascan.inventory.item.ItemView;
 import de.flxwdev.ascan.misc.Audio;
@@ -8,10 +8,8 @@ import dev.dbassett.skullcreator.SkullCreator;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,9 +56,9 @@ public abstract class SingletonView implements Listener {
         this.clickable = clickable;
         this.rows = rows;
         this.animation = 0;
-        this.placeHolder = AscanAPI.getConfig().placeHolder();
+        this.placeHolder = AscanLayer.getConfig().placeHolder();
 
-        AscanAPI.getInstance().getServer().getPluginManager().registerEvents(this, AscanAPI.getInstance());
+        AscanLayer.getInstance().getServer().getPluginManager().registerEvents(this, AscanLayer.getInstance());
 
         if(open) {
             open(player);
@@ -161,7 +159,7 @@ public abstract class SingletonView implements Listener {
 
                     count++;
                 }
-            }.runTaskTimer(AscanAPI.getInstance(), 0, animation);
+            }.runTaskTimer(AscanLayer.getInstance(), 0, animation);
         }
 
         player.openInventory(inventory);

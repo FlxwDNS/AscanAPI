@@ -1,7 +1,7 @@
 package de.flxwdev.ascan.inventory;
 
 import com.google.common.collect.Multimap;
-import de.flxwdev.ascan.AscanAPI;
+import de.flxwdev.ascan.AscanLayer;
 import de.flxwdev.ascan.inventory.item.InteractItem;
 import de.flxwdev.ascan.inventory.item.ItemView;
 import dev.dbassett.skullcreator.SkullCreator;
@@ -26,7 +26,7 @@ public abstract class FilterView<T, D extends Enum<D>> extends SingletonView {
     private int possibleAmount = 0;
     private int currentCategory = 0;
 
-    private final InteractItem localLastPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9")).name(AscanAPI.getConfig().arrowLeftName()), () -> {
+    private final InteractItem localLastPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9")).name(AscanLayer.getConfig().arrowLeftName()), () -> {
         if(currentPage > 1) {
             createPage(--currentPage);
             player().playSound(player().getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
@@ -34,7 +34,7 @@ public abstract class FilterView<T, D extends Enum<D>> extends SingletonView {
             player().playSound(player().getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
         }
     });
-    private final InteractItem localNextPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).name(AscanAPI.getConfig().arrowRightName()), () -> {
+    private final InteractItem localNextPage = new InteractItem(ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/19bf3292e126a105b54eba713aa1b152d541a1d8938829c56364d178ed22bf")).name(AscanLayer.getConfig().arrowRightName()), () -> {
         if(currentPage != maxPage() && maxPage() > 1) {
             createPage(++currentPage);
             player().playSound(player().getLocation(), Sound.BLOCK_PACKED_MUD_PLACE, 1f, 1f);
@@ -61,7 +61,7 @@ public abstract class FilterView<T, D extends Enum<D>> extends SingletonView {
         filterItem = new InteractItem(new ItemView(Material.SPYGLASS).name("§8» §6Filter").rawList(loreList()), () -> {
             currentCategory++;
             if(categories.size() < currentCategory) {
-                Bukkit.getScheduler().runTaskLater(AscanAPI.getInstance(), () -> {
+                Bukkit.getScheduler().runTaskLater(AscanLayer.getInstance(), () -> {
                     currentCategory = 0;
                     defineFilterItem();
                     createPage(currentPage);
