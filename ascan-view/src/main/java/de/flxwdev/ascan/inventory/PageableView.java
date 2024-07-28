@@ -5,6 +5,7 @@ import de.flxwdev.ascan.inventory.item.InteractItem;
 import de.flxwdev.ascan.inventory.item.ItemView;
 import de.flxwdev.ascan.inventory.item.SkullCreator;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,6 +23,11 @@ public abstract class PageableView<T> extends SingletonView {
     private int possibleAmount;
 
     private final List<Integer> cItems;
+
+    @Setter
+    private int slotLeft;
+    @Setter
+    private int slotRight;
 
     private SingletonView backPage;
     private InteractItem backItem;
@@ -52,6 +58,9 @@ public abstract class PageableView<T> extends SingletonView {
 
     public PageableView(Player player, Component name, int rows, boolean clickable, List<T> values) {
         super(player, name, rows, clickable, false);
+
+        this.slotLeft = 3;
+        this.slotRight = 5;
 
         this.cItems = new ArrayList<>();
         clear();
@@ -87,8 +96,8 @@ public abstract class PageableView<T> extends SingletonView {
         this.currentPage = id;
         clear();
 
-        item(inventory().getSize() / 9, 2, localLastPage);
-        item(inventory().getSize() / 9, 6, localNextPage);
+        item(inventory().getSize() / 9, this.slotLeft, localLastPage);
+        item(inventory().getSize() / 9, this.slotRight, localNextPage);
         if(backItem != null) {
             if (currentPage == 1) {
                 placeHolder(rows, 4);
@@ -99,7 +108,7 @@ public abstract class PageableView<T> extends SingletonView {
         }
 
         if(values.isEmpty()) {
-            item(3, 4, ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/3cc470ae2631efdfaf967b369413bc2451cd7a39465da7836a6c7a14e877")).name("§8» §cDie Liste ist leer§8!"));
+            //item(3, 4, ItemView.of(SkullCreator.itemFromUrl("https://textures.minecraft.net/texture/3cc470ae2631efdfaf967b369413bc2451cd7a39465da7836a6c7a14e877")).name("§8» §cDie Liste ist leer§8!"));
         }
 
         for (T element : values.subList(possibleAmount * (currentPage - 1), Math.min(values.size(), possibleAmount * (currentPage - 1) + possibleAmount))) {
