@@ -3,7 +3,7 @@ package de.flxwdev.ascan.inventory;
 import de.flxwdev.ascan.AscanLayer;
 import de.flxwdev.ascan.inventory.item.InteractItem;
 import de.flxwdev.ascan.inventory.item.ItemView;
-import dev.dbassett.skullcreator.SkullCreator;
+import de.flxwdev.ascan.inventory.item.SkullCreator;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
