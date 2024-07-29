@@ -3,24 +3,39 @@ package de.flxwdev.ascan.misc;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Accessors(fluent = true)
 public final class Config {
     public Config() {
         this.placeHolder = Material.BLACK_STAINED_GLASS_PANE;
-        this.arrowLeftName = "§r§8» §6Letzte Seite";
-        this.arrowRightName = "§r§8» §6Nächste Seite";
-        this.arrowBackName = "§r§8» §6Zurück";
+
+        this.arrowBack = new ItemStack(Material.ARROW);
+        var arrowBackMeta = this.arrowBack.getItemMeta();
+        arrowBackMeta.setDisplayName("§r§8» §6Zurück");
+        this.arrowBack.setItemMeta(arrowBackMeta);
+
+        this.arrowLeft = new ItemStack(Material.ARROW);
+        var arrowLeftMeta = this.arrowLeft.getItemMeta();
+        arrowLeftMeta.setDisplayName("§r§8» §6Letzte Seite");
+        this.arrowLeft.setItemMeta(arrowLeftMeta);
+
+        this.arrowRight = new ItemStack(Material.ARROW);
+        var arrowRightMeta = this.arrowRight.getItemMeta();
+        arrowRightMeta.setDisplayName("§r§8» §6Nächste Seite");
+        this.arrowRight.setItemMeta(arrowRightMeta);
+
         this.pageSwitchSound = new Audio(org.bukkit.Sound.BLOCK_MUD_PLACE, 1);
         this.pageSwitchErrorSound = new Audio(org.bukkit.Sound.ENTITY_CHICKEN_EGG, 0);
         this.backPageSound = new Audio(org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1);
     }
 
     private Material placeHolder;
-    private String arrowLeftName;
-    private String arrowRightName;
-    private String arrowBackName;
+    private ItemStack arrowBack;
+    private ItemStack arrowLeft;
+    private ItemStack arrowRight;
+
     private Audio pageSwitchSound;
     private Audio pageSwitchErrorSound;
     private Audio backPageSound;
@@ -30,18 +45,18 @@ public final class Config {
         return this;
     }
 
-    public Config arrowLeftName(String arrowLeftName) {
-        this.arrowLeftName = arrowLeftName;
+    public Config arrowLeft(ItemStack arrowLeft) {
+        this.arrowLeft = arrowLeft;
         return this;
     }
 
-    public Config arrowRightName(String arrowRightName) {
-        this.arrowRightName = arrowRightName;
+    public Config arrowRight(ItemStack arrowRight) {
+        this.arrowRight = arrowRight;
         return this;
     }
 
-    public Config arrowBackName(String arrowBackName) {
-        this.arrowBackName = arrowBackName;
+    public Config arrowBack(ItemStack arrowBack) {
+        this.arrowBack = arrowBack;
         return this;
     }
 
