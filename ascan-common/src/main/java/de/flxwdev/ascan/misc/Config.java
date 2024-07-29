@@ -30,7 +30,6 @@ public final class Config {
         this.pageSwitchErrorSound = new Audio(org.bukkit.Sound.ENTITY_CHICKEN_EGG, 0);
         this.backPageSound = new Audio(org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1);
     }
-
     private Material placeHolder;
     private ItemStack arrowBack;
     private ItemStack arrowLeft;
